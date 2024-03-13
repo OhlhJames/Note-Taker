@@ -1,17 +1,17 @@
 const notes = require('express').Router();
-const { readFromFile} = require('../helpers/fsUtils');
+const {readFromFile, readAndAppend } = require('../helpers/fsUtils');
 
 notes.get('/', (req, res) =>
   readFromFile('./db/db.json').then((data) => res.json(JSON.parse(data)))
 );
 
-notes.post('/', (req, res) =>{
+notes.post('/', (req, res) => {
   const { title, text } = req.body;
 
   if (title && text) {
     const newNote = {
       title,
-      text
+      text,
     };
 
     readAndAppend(newNote, './db/db.json');
@@ -25,6 +25,7 @@ notes.post('/', (req, res) =>{
   } else {
     res.json('Error in posting feedback');
   }
+  
 });
 
 module.exports = notes
